@@ -13,15 +13,27 @@ public class MoveObject : GimmickOutput
     private Vector3 startPos; // 시작 위치
     private Quaternion startRotation; // 시작 회전
 
+    public bool isDone;
+
+    private void Start()
+    {
+        isDone = false;
+    }
+
     public override void Act()
     {
-        // 현재 오브젝트의 위치와 회전을 시작값으로 저장
-        startPos = transform.position;
-        startRotation = transform.rotation;
+        if (!isDone)
+        {
+            // 현재 오브젝트의 위치와 회전을 시작값으로 저장
+            startPos = transform.position;
+            startRotation = transform.rotation;
 
-        targetPos = transform.position + targetPos;
-        // 코루틴 시작
-        StartCoroutine(Movement());
+            targetPos = transform.position + targetPos;
+            // 코루틴 시작
+
+            StartCoroutine(Movement());
+            isDone = true;
+        }
     }
 
     public IEnumerator Movement()
