@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Crash_Gimmick : GimmickTrigger
 {
+    public bool TriggerActionDone;
     public enum eDetectiontype
     {
         enter, // 콜라이더 박스와 충돌 했을때
@@ -27,7 +28,7 @@ public class Crash_Gimmick : GimmickTrigger
             if (detectionType == eDetectiontype.enter)
             {
                 Debug.Log("enter충돌 감지함");
-                isTriggered = true;
+                GetComponentInParent<GimmickInput>().InvokeEvent();
             }
             timer = 0;
         }
@@ -39,11 +40,7 @@ public class Crash_Gimmick : GimmickTrigger
             if (timer >= delayTime)
             {
                 Debug.Log(delayTime + " 초 만큼 기다린 후 감지함");
-                if (isTriggered)
-                {
-                    return;
-                }
-                isTriggered = true;
+                GetComponentInParent<GimmickInput>().InvokeEvent();
             }
             else
             {
@@ -58,7 +55,7 @@ public class Crash_Gimmick : GimmickTrigger
             if (detectionType == eDetectiontype.exit)
             { 
                 Debug.Log("exit충돌 감지함");
-                isTriggered = true;
+                GetComponentInParent<GimmickInput>().InvokeEvent();
             }
             timer = 0;
         }

@@ -12,13 +12,19 @@ public class Interaction_Gimmick : GimmickTrigger
     Camera mainCamera; // 메인 카메라
 
     public Transform targetObject; // 3D 물체의 Transform
-
+    private bool isPlayerInTrigger;
     private void Start()
     {
         mainCamera = Camera.main;
         InteractionImge.gameObject.SetActive(false);
     }
-
+    private void Update()
+    {
+        if (isPlayerInTrigger && Input.GetKeyDown(KeyCode.G))
+        {
+            GetComponentInParent<GimmickInput>().InvokeEvent();
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & DetectionLayer) != 0)
@@ -35,17 +41,16 @@ public class Interaction_Gimmick : GimmickTrigger
 
             // 화면 좌표를 UI 좌표로 변환
             InteractionImge.position = screenPos;
+            isPlayerInTrigger = true;
         }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            isTriggered = true;
-        }
+        
     }
     private void OnTriggerExit(Collider other)
     {
         if (((1 << other.gameObject.layer) & DetectionLayer) != 0)
         {
             InteractionImge.gameObject.SetActive(false);
+            isPlayerInTrigger = false;
         }
     }
 }

@@ -10,5 +10,6 @@ public class CameraShake : GimmickOutput
     {
         CinemachineImpulseSource Shaker = GetComponent<CinemachineImpulseSource>();
         Shaker.GenerateImpulse(Velocity);
+        isDone = true;
     }
 }

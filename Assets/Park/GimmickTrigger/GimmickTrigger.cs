@@ -4,6 +4,5 @@ using UnityEngine;
 
 public abstract class GimmickTrigger : MonoBehaviour
 {
-    public bool isTriggered;
 
 }
