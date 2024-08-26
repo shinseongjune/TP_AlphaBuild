@@ -12,12 +12,14 @@ public class CameraSwitcher : GimmickOutput
     
     public void buttonVirtual()
     {
-        vCam.MoveToTopOfPrioritySubqueue();
+        vCam.Priority = 10;
+        freeLookCam.Priority = 9;
     }
 
     public void buttonFreeLook()
     {
-        freeLookCam.MoveToTopOfPrioritySubqueue();
+        freeLookCam.Priority = 10;
+        vCam.Priority = 9;
     }
 
     public override void Act()
