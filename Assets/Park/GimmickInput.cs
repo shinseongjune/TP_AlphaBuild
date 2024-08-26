@@ -13,8 +13,22 @@ public class GimmickInput : MonoBehaviour
 
     public List<SimpleEvent> OutputEvent;
 
+    public bool triggerMultipleTimes;
+
     public void InvokeEvent()
     {
+        if (triggerMultipleTimes)
+        {
+            for (int i = 0; i < OutputEvent.Count; i++)
+            {
+                for (int j = 0; j < OutputEvent[i].GetPersistentEventCount(); j++)
+                {
+                    Object targetObj = OutputEvent[i].GetPersistentTarget(j);
+                    GimmickOutput associatedOutput = targetObj.GetComponent<GimmickOutput>();
+                    associatedOutput.isDone = false;
+                }
+            }
+        }
         if (OutputEvent != null && OutputEvent.Count > 0)
         {
             StartCoroutine(InvokeEventsCoroutine());
@@ -23,6 +37,7 @@ public class GimmickInput : MonoBehaviour
 
     private bool isOutputGimmick;
     private bool isDoneAll;
+
 
     private IEnumerator InvokeEventsCoroutine()
     {
