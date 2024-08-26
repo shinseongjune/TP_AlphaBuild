@@ -9,6 +9,10 @@ public class CameraSwitcher : GimmickOutput
     [Header("지정된 카메라 위치로 이동 = 체크")]
     public bool ismovevirtualcam;
 
+    private void Start()
+    {
+        buttonFreeLook();
+    }
     public void buttonVirtual()
     {
         vCam.MoveToTopOfPrioritySubqueue();
