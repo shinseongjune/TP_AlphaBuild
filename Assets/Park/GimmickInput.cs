@@ -25,7 +25,10 @@ public class GimmickInput : MonoBehaviour
                 {
                     Object targetObj = OutputEvent[i].GetPersistentTarget(j);
                     GimmickOutput associatedOutput = targetObj.GetComponent<GimmickOutput>();
-                    associatedOutput.isDone = false;
+                    if (associatedOutput != null)
+                    {
+                        associatedOutput.isDone = false;
+                    }
                 }
             }
         }
