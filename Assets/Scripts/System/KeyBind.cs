@@ -9,16 +9,14 @@ public static class KeyBind
         Move_Backward,
         Move_Left,
         Move_Right,
-        Weapon_One,
-        Weapon_Two,
-        Weapon_Three,
-        Weapon_Four,
         Sprint,
         Jump,
         Roll,
         Dash,
         Interact,
         BasicSkill,
+        Special_Skill,
+        Morph,
     }
 
     public static Dictionary<Action, KeyCode> keys = new Dictionary<Action, KeyCode>();
@@ -28,18 +26,17 @@ public static class KeyBind
     public static KeyCode move_left => keys[Action.Move_Left];
     public static KeyCode move_right => keys[Action.Move_Right];
 
-    public static KeyCode weapon_one => keys[Action.Weapon_One];
-    public static KeyCode weapon_two => keys[Action.Weapon_Two];
-    public static KeyCode weapon_three => keys[Action.Weapon_Three];
-    public static KeyCode weapon_four => keys[Action.Weapon_Four];
-
     public static KeyCode sprint => keys[Action.Sprint];
     public static KeyCode jump => keys[Action.Jump];
     public static KeyCode roll => keys[Action.Roll];
     public static KeyCode dash => keys[Action.Dash];
 
     public static KeyCode interact => keys[Action.Interact];
+
     public static KeyCode basicSkill => keys[Action.BasicSkill];
+    public static KeyCode special_skill => keys[Action.Special_Skill];
+
+    public static KeyCode morph => keys[Action.Morph];
 
     static KeyBind()
     {
@@ -48,10 +45,6 @@ public static class KeyBind
         keys[Action.Move_Left] = KeyCode.A;
         keys[Action.Move_Right] = KeyCode.D;
 
-        keys[Action.Weapon_One] = KeyCode.Alpha1;
-        keys[Action.Weapon_Two] = KeyCode.Alpha2;
-        keys[Action.Weapon_Three] = KeyCode.Alpha3;
-        keys[Action.Weapon_Four] = KeyCode.Alpha4;
 
         keys[Action.Sprint] = KeyCode.LeftShift;
         keys[Action.Jump] = KeyCode.V;
@@ -59,6 +52,10 @@ public static class KeyBind
         keys[Action.Dash] = KeyCode.LeftControl;
 
         keys[Action.Interact] = KeyCode.F;
+
         keys[Action.BasicSkill] = KeyCode.Mouse0;
+        keys[Action.Special_Skill] = KeyCode.Alpha1;
+
+        keys[Action.Morph] = KeyCode.R;
     }
 }

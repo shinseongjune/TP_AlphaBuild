@@ -57,6 +57,8 @@ public class SkillEffect : MonoBehaviour
 
     protected List<GameObject> alreadys = new List<GameObject>();
 
+    public CrowdControlData ccData;
+
     protected virtual void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -119,7 +121,7 @@ public class SkillEffect : MonoBehaviour
 
         if (!target.TryGetComponent(out Stats stats)) return;
 
-        stats.Damaged(damageData.baseValue); //TODO: mod 적용
+        stats.Damaged(damageData.baseValue, ccData); //TODO: mod 적용
 
         //int clipIdx = UnityEngine.Random.Range(0, hitClips.Length);
         //

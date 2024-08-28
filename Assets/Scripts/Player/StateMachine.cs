@@ -93,7 +93,6 @@ public class LocomotionState : State
     public override void OnExit(PlayerMainController player)
     {
         player.MAX_JUMP_HEIGHT = 8f;
-        player.JUMP_INCREASE_AMOUNT = 9.5f;
         if (player.jumpGauge > 8) player.jumpGauge = 8;
     }
 
@@ -112,15 +111,13 @@ public class LocomotionState : State
         if (isSprint)
         {
             player.MAX_JUMP_HEIGHT = 40f;
-            player.JUMP_INCREASE_AMOUNT = 10f;
         }
         else
         {
             player.MAX_JUMP_HEIGHT = 8f;
-            player.JUMP_INCREASE_AMOUNT = 9.5f;
         }
 
-        if (Input.GetKey(KeyBind.jump)) player.jumpGauge = Mathf.Min(player.jumpGauge + player.JUMP_INCREASE_AMOUNT * Time.deltaTime, player.MAX_JUMP_HEIGHT);
+        if (Input.GetKey(KeyBind.jump)) player.jumpGauge = Mathf.Min(player.jumpGauge + 2 * player.MAX_JUMP_HEIGHT * Time.deltaTime, player.MAX_JUMP_HEIGHT);
         if (Input.GetKeyUp(KeyBind.jump))
         {
             isJumpActivated = true;
@@ -530,7 +527,10 @@ public class AttackState : State
 
     public override void OnEnter(PlayerMainController player)
     {
-        player.temp_weaponTrail.SetActive(true);
+        foreach (GameObject trail in player.trails)
+        {
+            trail.SetActive(true);
+        }
 
 #if UNITY_EDITOR
         Debug.Log("Enter State : " + GetType().Name);
@@ -539,8 +539,10 @@ public class AttackState : State
 
     public override void OnExit(PlayerMainController player)
     {
-        player.temp_weaponTrail.SetActive(false);
-
+        foreach (GameObject trail in player.trails)
+        {
+            trail.SetActive(false);
+        }
     }
 
     public override void OnStay(PlayerMainController player)
@@ -663,8 +665,8 @@ public class InteractState : State
 public class StateMachine : IUpdater
 {
     PlayerMainController player;
-
-    List<State> states = new List<State>();
+    private static readonly List<State> states1 = new List<State>();
+    List<State> states = states1;
 
     public State current { get; private set; }
 
@@ -692,17 +694,9 @@ public class StateMachine : IUpdater
 
     public void Transition(State.Type type)
     {
-#if UNITY_EDITOR
-        string currentName = current.GetType().Name;
-#endif
-
         current?.OnExit(player);
         current = states[(int)type];
         current?.OnEnter(player);
-
-#if UNITY_EDITOR
-        Debug.Log("Transition Activated : " + currentName + " to " + current.GetType().Name);
-#endif
     }
 
     public void Update()

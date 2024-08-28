@@ -27,6 +27,6 @@ MonoBehaviour:
   _cooldown: 0
   _prefab_additionals: []
   _chains:
-  - {fileID: 11400000, guid: f36b7d0784565f44795522ad543b6c9c, type: 2}
-  - {fileID: 11400000, guid: 01ad3bca655b80b4d940600887b0baac, type: 2}
-  - {fileID: 11400000, guid: b94bafcdd83b488408e34d79331faf8b, type: 2}
+  - {fileID: 11400000, guid: 72bdfdf4e99f21545a2ba557753a5736, type: 2}
+  - {fileID: 11400000, guid: a71ab7d2fafd5dc46ac92a53286bb8cf, type: 2}
+  - {fileID: 11400000, guid: ea8a3d6ef663c954b891bcbb0df3fd91, type: 2}

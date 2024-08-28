@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,8 +6,10 @@ using UnityEngine;
 [System.Serializable]
 public class CrowdControlController : IUpdater
 {
+    public PlayerMainController main { get; private set; }
+
     List<CrowdControl> container = new List<CrowdControl>();
-    List<int> removeIndex = new List<int>();
+    List<int> removeIndices = new List<int>();
 
     public bool isCCed
     {
@@ -16,10 +19,18 @@ public class CrowdControlController : IUpdater
         }
     }
 
-    //TODO: 점감 시스템?
+    public CrowdControlController(PlayerMainController main)
+    {
+        this.main = main;
+    }
 
     public void Update()
     {
+        if (!isCCed)
+        {
+            main.anim.SetBool("CCed", false);
+        }
+
         for(int i = 0; i < container.Count; i++)
         {
             var c = container[i];
@@ -28,36 +39,44 @@ public class CrowdControlController : IUpdater
 
             if (c.duration <= 0)
             {
-                removeIndex.Add(i);
+                removeIndices.Add(i);
             }
         }
 
-        for (int i = removeIndex.Count - 1; i >= 0; i--)
+        for (int i = removeIndices.Count - 1; i >= 0; i--)
         {
             container[i].OnExit();
             container.RemoveAt(i);
         }
 
-        removeIndex.Clear();
+        removeIndices.Clear();
     }
 
     public void ApplyCC(CrowdControl cc)
     {
-        cc.currentHandler = this;
+        cc.controller = this;
         container.Add(cc);
         cc.OnEnter();
     }
 }
 
+[Serializable]
+public struct CrowdControlData
+{
+    public Vector3 dir;
+    public CrowdControl.Type type;
+    public float duration;
+}
+
 public abstract class CrowdControl
 {
-    public CrowdControlController currentHandler;
+    public CrowdControlController controller;
     
-    [System.Flags]
     public enum Type
     {
-        Stagger = 1 << 0,
-        Knockback = 1 << 1,
+        None,
+        Stagger,
+        Knockback,
     }
 
     public Type type
@@ -86,7 +105,17 @@ public class Stagger : CrowdControl
 
     public override void OnEnter()
     {
-
+        string stateName;
+        if (Vector3.Dot(controller.main.logic.logicalForward, dir) <= 0)
+        {
+            stateName = "Stagger from Back";
+        }
+        else
+        {
+            stateName = "Stagger from Forward";
+        }
+        controller.main.anim.CrossFade(stateName, 0);
+        controller.main.anim.SetBool("CCed", true);
     }
 
     public override void OnStay()

@@ -1,7 +1,7 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using static PlayerMainController;
 using SkillDictionary = System.Collections.Generic.Dictionary<SkillController.SkillList, int>;
 
 public class SkillController
@@ -21,7 +21,7 @@ public class SkillController
 
     int currentChainIndex = 0;
 
-    Dictionary<int, SkillDictionary> skills = new Dictionary<int, SkillDictionary>(); // (Morph idx, Dictionary<SkillList, skill idx>)
+    Dictionary<Morph, SkillDictionary> skills = new Dictionary<Morph, SkillDictionary>();
 
     Dictionary<int, float> cooldowns = new Dictionary<int, float>(); //TODO: 쿨타임 등록하고 관리할 것.
 
@@ -29,9 +29,70 @@ public class SkillController
     {
         this.player = player;
 
-        //TODO: morph 번호 설정 후 교체할 것. unarmed(0) 포함.
-        skills.Add(0, new SkillDictionary());
-        skills[1].Add(SkillList.Basic_Ground, 0);
+        int maxMorphCombinations = (int)Math.Pow(2, Enum.GetValues(typeof(Morph)).Length);
+
+        for (int i = 0; i < maxMorphCombinations; i++)
+        {
+            Morph morphCombination = (Morph)i;
+
+            skills[morphCombination] = new SkillDictionary();
+
+            switch (morphCombination)
+            {
+                case Morph.NONE:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+
+                case Morph.LEFT_HAND:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.RIGHT_HAND:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.BACK:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.LEGS:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+
+                case Morph.LEFT_HAND | Morph.RIGHT_HAND:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.LEFT_HAND | Morph.BACK:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.LEFT_HAND | Morph.LEGS:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.RIGHT_HAND | Morph.BACK:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.RIGHT_HAND | Morph.LEGS:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.BACK | Morph.LEGS:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+
+                case Morph.LEFT_HAND | Morph.RIGHT_HAND | Morph.BACK:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.LEFT_HAND | Morph.RIGHT_HAND | Morph.LEGS:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.LEFT_HAND | Morph.BACK | Morph.LEGS:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+                case Morph.RIGHT_HAND | Morph.BACK | Morph.LEGS:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+
+                case Morph.LEFT_HAND | Morph.RIGHT_HAND | Morph.BACK | Morph.LEGS:
+                    skills[morphCombination].Add(SkillList.Basic_Ground, 0);
+                    break;
+            }
+        }
     }
 
     // IUpdater로 업데이트 등록하고 실행.(쿨타임 처리)
@@ -49,7 +110,7 @@ public class SkillController
             {
                 if (currentEffect != null)
                 {
-                    Object.Destroy(currentEffect.gameObject);
+                    UnityEngine.Object.Destroy(currentEffect.gameObject);
                 }
                 int length = skill.chains.Length;
                 skill = skill.chains[currentChainIndex];
@@ -62,7 +123,7 @@ public class SkillController
 
             GameObject prefab = skill.prefab_effect;
 
-            currentEffect = Object.Instantiate(prefab, player.skillPosition.position, player.transform.rotation).GetComponent<SkillEffect>();
+            currentEffect = UnityEngine.Object.Instantiate(prefab, player.skillPosition.position, player.transform.rotation).GetComponent<SkillEffect>();
             currentEffect.Init(skill, player.gameObject);
             if (currentEffect.skill.type == Skill.Type.Melee) currentEffect.transform.SetParent(player.skillPosition);
             currentSkillIdx = skillIdx;
@@ -79,7 +140,7 @@ public class SkillController
     {
         int trySkillIdx = -1;
 
-        int currentMorph = (int)player.currentMorph;
+        Morph currentMorph = player.currentMorph;
         SkillList currentSkill = SkillList.Basic_Ground;
 
         switch (input)
@@ -94,7 +155,7 @@ public class SkillController
                     currentSkill = SkillList.Basic_Air;
                 }
                 break;
-            case KeyBind.Action.Weapon_One:
+            case KeyBind.Action.Special_Skill:
                 if (player.IsGrounded())
                 {
                     currentSkill = SkillList.Special_Ground;
@@ -135,7 +196,7 @@ public class SkillController
 
         if (currentEffect != null)
         {
-            Object.Destroy(currentEffect.gameObject);
+            UnityEngine.Object.Destroy(currentEffect.gameObject);
         }
     }
 }

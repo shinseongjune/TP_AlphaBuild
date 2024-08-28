@@ -3,10 +3,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(CharacterController))]
 public class PlayerMainController : MonoBehaviour
 {
+    #region to use dictionary in inspector
+    [Serializable]
+    public class MorphBodyMapping
+    {
+        public Morph morph;
+        public GameObject body;
+    }
+    [SerializeField] List<MorphBodyMapping> _bodies = new List<MorphBodyMapping>();
+    #endregion
+
     [Flags]
     public enum Morph
     {
@@ -18,7 +26,15 @@ public class PlayerMainController : MonoBehaviour
     }
 
     public Transform vCamera;
-    public GameObject temp_weaponTrail;
+    public List<GameObject> trails
+    {
+        get
+        {
+            return bodies[currentMorph].GetComponent<PlayerMorphData>().trails;
+        }
+    }
+
+    Dictionary<Morph, GameObject> bodies = new Dictionary<Morph, GameObject>();
 
     StateMachine fsm;
     //public CameraController cam;
@@ -28,6 +44,8 @@ public class PlayerMainController : MonoBehaviour
     public CrowdControlController cc;
     public PhysicsController physics;
     public SkillController skill;
+
+    PlayerStats stats;
 
     public Transform cameraLookAt;
     public Transform cameraRig;
@@ -40,7 +58,6 @@ public class PlayerMainController : MonoBehaviour
 
     public float jumpGauge;
     public float DEFAULT_JUMP_GAUGE = 2.5f;
-    public float JUMP_INCREASE_AMOUNT = 9.5f;
     public float MAX_JUMP_HEIGHT = 8f;
 
     public float walkSpeed = 4f;
@@ -50,23 +67,41 @@ public class PlayerMainController : MonoBehaviour
 
     public Collider attachedWall;
 
+    [HideInInspector] public bool isGameStopped;
+
     private void Awake()
     {
         CharacterController controller = GetComponent<CharacterController>();
 
         fsm = new StateMachine(this);
         //cam = new CameraController(vCamera, cameraRig, cameraLookAt);
-        vCamera = FindFirstObjectByType<CinemachineFreeLook>()?.transform;
+        vCamera = FindFirstObjectByType<CinemachineFreeLook>().transform;
         if (vCamera == null) throw new System.Exception("no freelook camera is found in this scene.");
 
-        anim = new AnimationController(GetComponent<Animator>());
+        anim = new AnimationController(GetComponentInChildren<Animator>());
         logic = new LogicController(transform.forward, this, controller);
-        cc = new CrowdControlController();
+        cc = new CrowdControlController(this);
         physics = new PhysicsController(transform, controller);
         skill = new SkillController(this);
+        stats = GetComponent<PlayerStats>();
 
         updaters.Add(fsm);
         updaters.Add(cc);
+        updaters.Add(stats);
+
+        foreach (var mapping in _bodies)
+        {
+            if (!bodies.ContainsKey(mapping.morph))
+            {
+                Morph morph = mapping.morph;
+                if ((int)morph == -1) morph = Morph.LEFT_HAND | Morph.RIGHT_HAND | Morph.BACK | Morph.LEGS;
+                bodies.Add(morph, mapping.body);
+            }
+            else
+            {
+                throw new Exception("player morph body setting failed! check inspector.");
+            }
+        }
     }
 
     private void Start()
@@ -81,9 +116,45 @@ public class PlayerMainController : MonoBehaviour
 
     void Update()
     {
-        foreach(IUpdater updater in updaters)
+        if (Input.GetKeyDown(KeyBind.morph))
+        {
+            GameManager.Instance.SetActiveMorphScreen(true);
+        }
+        else if (Input.GetKeyUp(KeyBind.morph))
+        {
+            GameManager.Instance.SetActiveMorphScreen(false);
+        }
+
+        if (isGameStopped) return;
+
+        foreach (IUpdater updater in updaters)
         {
             updater.Update();
+        }
+    }
+
+    public void SetInvincibility(bool isInvincible)
+    {
+        stats.isInvincible = isInvincible;
+    }
+
+    public void DoMorph(Morph morph)
+    {
+        if (stats.GetMorph(morph))
+        {
+            bodies[currentMorph].SetActive(false);
+            bodies[morph].SetActive(true);
+
+            currentMorph = morph;
+
+            Animator newAnim = bodies[currentMorph].GetComponent<Animator>();
+            anim.ChangeAnimator(newAnim);
+        }
+        else
+        {
+#if UNITY_EDITOR
+            print($"not enough morph point. morph to '{morph.ToString()}' has failed.");
+#endif
         }
     }
 

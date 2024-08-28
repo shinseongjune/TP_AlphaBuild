@@ -157,4 +157,11 @@ public class AnimationController
             anim.CrossFade(animIDs[stateName], normalizedTransitionDuration);
         }
     }
+
+    public void ChangeAnimator(Animator newAnim)
+    {
+        var info = anim.GetCurrentAnimatorStateInfo(0);
+        anim = newAnim;
+        anim.Play(info.fullPathHash, 0, info.normalizedTime);
+    }
 }
