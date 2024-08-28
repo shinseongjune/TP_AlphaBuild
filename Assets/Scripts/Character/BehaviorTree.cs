@@ -210,8 +210,8 @@ public class BackstepSequence : Sequence
 {
     public BackstepSequence()
     {
-        AddChild(new TooCloseCondition());
-        AddChild(new BackstepAction());
+        //AddChild(new TooCloseCondition());
+        //AddChild(new BackstepAction());
     }
 }
 
@@ -219,8 +219,8 @@ public class ChaseSequence : Sequence
 {
     public ChaseSequence()
     {
-        AddChild(new TooFarCondition());
-        AddChild(new ChaseAction());
+        //AddChild(new TooFarCondition());
+        //AddChild(new ChaseAction());
     }
 }
 
@@ -232,7 +232,7 @@ public class RootNode : Sequence
         AddChild(new CCSequence());
         AddChild(new AttackingSequence());
         AddChild(new CombatSequence());
-        AddChild(new DetectionSequence());
+        //AddChild(new DetectionSequence());
     }
 }
 
