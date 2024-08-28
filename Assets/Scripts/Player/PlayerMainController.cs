@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMainController : MonoBehaviour
+public class PlayerMainController : MainController
 {
     #region to use dictionary in inspector
     [Serializable]
@@ -39,8 +39,6 @@ public class PlayerMainController : MonoBehaviour
     StateMachine fsm;
     //public CameraController cam;
 
-    public AnimationController anim;
-    public LogicController logic;
     public CrowdControlController cc;
     public PhysicsController physics;
     public SkillController skill;

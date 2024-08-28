@@ -84,10 +84,6 @@ public class LocomotionState : State
         player.anim.SetBool("IsGrounded", true);
 
         player.jumpGauge = player.DEFAULT_JUMP_GAUGE;
-
-#if UNITY_EDITOR
-        Debug.Log("Enter State : " + GetType().Name);
-#endif
     }
 
     public override void OnExit(PlayerMainController player)
@@ -207,10 +203,6 @@ public class JumpState : State
         player.anim.SetTrigger("Jump");
 
         player.jumpGauge = player.DEFAULT_JUMP_GAUGE;
-
-#if UNITY_EDITOR
-        Debug.Log("Enter State : " + GetType().Name);
-#endif
     }
 
     public override void OnExit(PlayerMainController player)
@@ -292,10 +284,6 @@ public class AirState : State
     {
         player.anim.SetBool("IsGrounded", false);
         player.jumpGauge = player.DEFAULT_JUMP_GAUGE;
-
-#if UNITY_EDITOR
-        Debug.Log("Enter State : " + GetType().Name);
-#endif
     }
 
     public override void OnExit(PlayerMainController player)
@@ -366,10 +354,6 @@ public class RollState : State
     public override void OnEnter(PlayerMainController player)
     {
         player.anim.CrossFade("Roll", 0);
-
-#if UNITY_EDITOR
-        Debug.Log("Enter State : " + GetType().Name);
-#endif
     }
 
     public override void OnExit(PlayerMainController player)
@@ -425,10 +409,6 @@ public class DashState : State
     {
         player.anim.SetTrigger("Dash");
         player.SetForcedVerticalVelocity(0);
-
-#if UNITY_EDITOR
-        Debug.Log("Enter State : " + GetType().Name);
-#endif
     }
 
     public override void OnExit(PlayerMainController player)
@@ -466,9 +446,6 @@ public class WallState : State
     public override void OnEnter(PlayerMainController player)
     {
 
-#if UNITY_EDITOR
-        Debug.Log("Enter State : " + GetType().Name);
-#endif
     }
 
     public override void OnExit(PlayerMainController player)
@@ -531,10 +508,6 @@ public class AttackState : State
         {
             trail.SetActive(true);
         }
-
-#if UNITY_EDITOR
-        Debug.Log("Enter State : " + GetType().Name);
-#endif
     }
 
     public override void OnExit(PlayerMainController player)
@@ -607,9 +580,6 @@ public class CCState : State
     public override void OnEnter(PlayerMainController player)
     {
 
-#if UNITY_EDITOR
-        Debug.Log("Enter State : " + GetType().Name);
-#endif
     }
 
     public override void OnExit(PlayerMainController player)
@@ -639,9 +609,6 @@ public class InteractState : State
     public override void OnEnter(PlayerMainController player)
     {
 
-#if UNITY_EDITOR
-        Debug.Log("Enter State : " + GetType().Name);
-#endif
     }
 
     public override void OnExit(PlayerMainController player)
@@ -686,10 +653,6 @@ public class StateMachine : IUpdater
 
         int loco = (int)State.Type.Locomotion;
         current = states[loco];
-
-#if UNITY_EDITOR
-        Debug.Log("State Machine Activated. First State Idx : " + loco + " of State '" + ((State.Type)loco).ToString() + "'");
-#endif
     }
 
     public void Transition(State.Type type)

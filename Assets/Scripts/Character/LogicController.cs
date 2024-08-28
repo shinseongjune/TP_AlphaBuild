@@ -10,7 +10,7 @@ public class LogicController
         get;
         private set;
     }
-    PlayerMainController player;
+    MainController main;
     CharacterController controller;
 
     public float aimingDistance = 4f;
@@ -23,10 +23,10 @@ public class LogicController
 
     //TODO: buff, debuff, ailments
 
-    public LogicController(Vector3 forward, PlayerMainController player, CharacterController controller)
+    public LogicController(Vector3 forward, MainController main, CharacterController controller)
     {
         logicalForward = forward;
-        this.player = player;
+        this.main = main;
         this.controller = controller;
     }
 
@@ -37,7 +37,7 @@ public class LogicController
 
     public GameObject GetAimingTarget()
     {
-        Vector3 playerCenter = player.transform.position + Vector3.up;
+        Vector3 playerCenter = main.transform.position + Vector3.up;
         Collider[] nearEnemies = Physics.OverlapSphere(playerCenter, aimingDistance, enemyLayer, QueryTriggerInteraction.Ignore);
 
         List<Transform> detectedEnemies = new List<Transform>();
@@ -56,7 +56,7 @@ public class LogicController
         GameObject closest = null;
         foreach (Transform transform in detectedEnemies)
         {
-            float dist = Vector3.Distance(player.transform.position, transform.position);
+            float dist = Vector3.Distance(main.transform.position, transform.position);
 
             if (dist < closestDistance)
             {

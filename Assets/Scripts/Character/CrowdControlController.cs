@@ -6,7 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class CrowdControlController : IUpdater
 {
-    public PlayerMainController main { get; private set; }
+    public MainController main { get; private set; }
 
     List<CrowdControl> container = new List<CrowdControl>();
     List<int> removeIndices = new List<int>();
@@ -19,7 +19,7 @@ public class CrowdControlController : IUpdater
         }
     }
 
-    public CrowdControlController(PlayerMainController main)
+    public CrowdControlController(MainController main)
     {
         this.main = main;
     }

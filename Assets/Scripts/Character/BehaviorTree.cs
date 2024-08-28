@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 #region base
@@ -13,7 +12,7 @@ public enum NodeState
 
 public abstract class Node
 {
-    public MonsterMainController main;
+    public static MonsterMainController main;
 
     // 노드의 상태를 나타내는 변수
     protected NodeState _nodeState;
@@ -107,7 +106,7 @@ public class CheckHealth : Node
 {
     public override NodeState Evaluate()
     {
-        if (main.GetComponent<Stats>().hp <= 0)
+        if (main.GetComponent<EnemyStats>().hp <= 0)
         {
             _nodeState = NodeState.Success;
             return _nodeState;
@@ -126,7 +125,7 @@ public class DeathAction : Node
         return _nodeState;
     }
 }
-#endregion
+
 public class CCSequence : Sequence
 {
     public CCSequence()
@@ -182,13 +181,15 @@ public class AttackingCondition : Node
     }
 }
 
-public class CombatSequence : Sequence
+public class CombatSelector : Selector
 {
-    public CombatSequence()
+    public CombatSelector()
     {
         AddChild(new TargetOnCondition());
         AddChild(new BackstepSequence());
         AddChild(new ChaseSequence());
+        //AddChild(doattacksequence)
+        AddChild(new WaitAction());
     }
 }
 
@@ -210,8 +211,35 @@ public class BackstepSequence : Sequence
 {
     public BackstepSequence()
     {
-        //AddChild(new TooCloseCondition());
-        //AddChild(new BackstepAction());
+        AddChild(new TooCloseCondition());
+        AddChild(new BackstepAction());
+    }
+}
+
+public class TooCloseCondition : Node
+{
+    public override NodeState Evaluate()
+    {
+        if (main.target != null)
+        {
+            if (Vector3.Distance(main.transform.position, main.target.transform.position) <= main.DISTANCE_LIMIT.x)
+            {
+                _nodeState = NodeState.Success;
+                return _nodeState;
+            }
+        }
+        _nodeState = NodeState.Failure;
+        return _nodeState;
+    }
+}
+
+public class BackstepAction : Node
+{
+    public override NodeState Evaluate()
+    {
+        main.Backstep();
+        _nodeState = NodeState.Success;
+        return _nodeState;
     }
 }
 
@@ -219,36 +247,131 @@ public class ChaseSequence : Sequence
 {
     public ChaseSequence()
     {
-        //AddChild(new TooFarCondition());
-        //AddChild(new ChaseAction());
+        AddChild(new TooFarCondition());
+        AddChild(new ChaseAction());
     }
 }
 
-public class RootNode : Sequence
+public class TooFarCondition : Node
 {
-    public RootNode()
+    public override NodeState Evaluate()
     {
+        if (main.target != null)
+        {
+            if (Vector3.Distance(main.transform.position, main.target.transform.position) >= main.DISTANCE_LIMIT.y)
+            {
+                _nodeState = NodeState.Success;
+                return _nodeState;
+            }
+        }
+        _nodeState = NodeState.Failure;
+        return _nodeState;
+    }
+}
+
+public class ChaseAction : Node
+{
+    public override NodeState Evaluate()
+    {
+        main.Chase();
+        _nodeState = NodeState.Success;
+        return _nodeState;
+    }
+}
+
+public class WaitAction : Node
+{
+    public override NodeState Evaluate()
+    {
+        if (main.target == null)
+        {
+            _nodeState = NodeState.Failure;
+            return _nodeState;
+        }
+        Vector3 dir = main.target.transform.position - main.transform.position;
+        dir.y = 0;
+        main.transform.rotation = Quaternion.LookRotation(dir.normalized);
+        _nodeState = NodeState.Success;
+        return _nodeState;
+    }
+}
+
+public class DetectionSequence : Sequence
+{
+    public DetectionSequence()
+    {
+        AddChild(new DetectCondition());
+        AddChild(new IdleAction());
+    }
+}
+
+public class DetectCondition : Node
+{
+    public override NodeState Evaluate()
+    {
+        Collider[] player = Physics.OverlapSphere(main.transform.position, main.DETECTION_RANGE, LayerMask.GetMask("Player"));
+
+        if (player.Length > 0)
+        {
+            PlayerMainController target = player[0].transform.root.GetComponent<PlayerMainController>();
+            main.SetTarget(target);
+            _nodeState = NodeState.Success;
+            return _nodeState;
+        }
+        _nodeState = NodeState.Failure;
+        return _nodeState;
+    }
+}
+
+public class IdleAction : Node
+{
+    public override NodeState Evaluate()
+    {
+        main.DoIdle();
+        _nodeState = NodeState.Success;
+        return _nodeState;
+    }
+}
+
+public class RootNode : Selector
+{
+    public RootNode(MonsterMainController main)
+    {
+        Node.main = main;
+
         AddChild(new DeathSequence());
         AddChild(new CCSequence());
         AddChild(new AttackingSequence());
-        AddChild(new CombatSequence());
-        //AddChild(new DetectionSequence());
+        AddChild(new CombatSelector());
+        AddChild(new DetectionSequence());
     }
 }
+#endregion
 
-public class BehaviorTree
+public class BehaviorTree : IUpdater
 {
     private Node _rootNode;
 
-    void Start()
+    float thinkCooldown = 0;
+    float UPDATE_TERM = 0.2f;
+
+    public BehaviorTree(MonsterMainController main)
     {
         // Behavior Tree의 루트 노드 초기화
-        _rootNode = new RootNode();
+        _rootNode = new RootNode(main);
     }
 
-    void Update()
+    public void Update()
     {
+        if (thinkCooldown > 0)
+        {
+            thinkCooldown -= Time.deltaTime;
+            return;
+        }
+
         // 매 프레임마다 Behavior Tree 평가
         _rootNode.Evaluate();
+
+        thinkCooldown = UPDATE_TERM;
     }
 }
