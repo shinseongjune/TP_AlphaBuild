@@ -23,7 +23,15 @@ public abstract class Stats : MonoBehaviour
 
         hp = Mathf.Max(hp - damage, 0);
 
-
+        switch (ccData.type)
+        {
+            case CrowdControl.Type.Stagger:
+                Stagger stagger = new Stagger(ccData.duration, ccData.dir);
+                GetComponent<MainController>().cc.ApplyCC(stagger);
+                break;
+            case CrowdControl.Type.Knockback:
+                break;
+        }
 
         if (hp <= 0)
         {

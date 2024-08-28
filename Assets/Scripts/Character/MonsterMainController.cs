@@ -8,7 +8,8 @@ public class MonsterMainController : MainController
 {
     public Transform targetPosition;
 
-    public CrowdControlController cc;
+    CharacterController controller;
+
     BehaviorTree ai;
 
     public bool isAttacker;
@@ -25,7 +26,7 @@ public class MonsterMainController : MainController
 
     private void Awake()
     {
-        CharacterController controller = GetComponentInParent<CharacterController>();
+        controller = GetComponentInParent<CharacterController>();
 
         anim = new AnimationController(GetComponentInParent<Animator>());
         cc = new CrowdControlController(this);
@@ -41,12 +42,12 @@ public class MonsterMainController : MainController
     {
         if (isGameStopped) return;
 
+        logic.SetLogicalForward(transform.rotation);
+
         foreach (IUpdater updater in updaters)
         {
             updater.Update();
         }
-
-        logic.SetLogicalForward(transform.rotation);
     }
 
     public void CancelAttack()
@@ -58,7 +59,9 @@ public class MonsterMainController : MainController
     {
         if (target == null) return;
 
-        targetPosition.position = target.transform.position;
+        Vector3 offset = (transform.position - target.transform.position).normalized * (DISTANCE_LIMIT.x + DISTANCE_LIMIT.y)/2;
+        targetPosition.position = target.transform.position + offset;
+        anim.SetFloat("MoveZ", 1);
     }
 
     public void Backstep()
@@ -81,9 +84,6 @@ public class MonsterMainController : MainController
 
     public void Die()
     {
-#if UNITY_EDITOR
-        print($"Monster {gameObject.name} is dead.");
-#endif
         transform.root.gameObject.SetActive(false);
     }
 }

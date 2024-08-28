@@ -127,10 +127,6 @@ public class SkillController
             currentEffect.Init(skill, player.gameObject);
             if (currentEffect.skill.type == Skill.Type.Melee) currentEffect.transform.SetParent(player.skillPosition);
             currentSkillIdx = skillIdx;
-
-#if UNITY_EDITOR
-            Debug.Log($"Skill Activated : {skill.skill_name} (idx : {skill.id})");
-#endif
         }
 
         return isSkillUsable;

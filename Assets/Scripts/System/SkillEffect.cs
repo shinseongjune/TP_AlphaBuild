@@ -123,6 +123,8 @@ public class SkillEffect : MonoBehaviour
 
         stats.Damaged(damageData.baseValue, ccData); //TODO: mod Àû¿ë
 
+        //main.cc.ApplyCC(stagger);
+
         //int clipIdx = UnityEngine.Random.Range(0, hitClips.Length);
         //
         //audioSource.clip = hitClips[clipIdx];

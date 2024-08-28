@@ -39,7 +39,6 @@ public class PlayerMainController : MainController
     StateMachine fsm;
     //public CameraController cam;
 
-    public CrowdControlController cc;
     public PhysicsController physics;
     public SkillController skill;
 

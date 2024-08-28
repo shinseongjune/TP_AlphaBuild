@@ -185,25 +185,10 @@ public class CombatSelector : Selector
 {
     public CombatSelector()
     {
-        AddChild(new TargetOnCondition());
         AddChild(new BackstepSequence());
         AddChild(new ChaseSequence());
         //AddChild(doattacksequence)
         AddChild(new WaitAction());
-    }
-}
-
-public class TargetOnCondition : Node
-{
-    public override NodeState Evaluate()
-    {
-        if (main.target != null)
-        {
-            _nodeState = NodeState.Success;
-            return _nodeState;
-        }
-        _nodeState = NodeState.Failure;
-        return _nodeState;
     }
 }
 
@@ -291,6 +276,7 @@ public class WaitAction : Node
         Vector3 dir = main.target.transform.position - main.transform.position;
         dir.y = 0;
         main.transform.rotation = Quaternion.LookRotation(dir.normalized);
+        main.DoIdle();
         _nodeState = NodeState.Success;
         return _nodeState;
     }

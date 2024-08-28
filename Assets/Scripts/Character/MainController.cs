@@ -9,7 +9,7 @@ public abstract class MainController : MonoBehaviour
 
     public AnimationController anim;
     public LogicController logic;
-    //public CrowdControlController cc;
+    public CrowdControlController cc;
     //public PhysicsController physics;
     //public SkillController skill;
     //public Stats stats;

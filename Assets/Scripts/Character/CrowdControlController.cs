@@ -81,8 +81,8 @@ public abstract class CrowdControl
 
     public Type type
     {
-        get { return type; }
-        protected set { type = value; }
+        get;
+        protected set;
     }
 
     public float duration;
@@ -136,7 +136,7 @@ public class Knockback : CrowdControl
 
     public Knockback(float duration, Vector3 dir, float distance)
     {
-        type = Type.Stagger;
+        type = Type.Knockback;
         this.duration = duration;
         this.dir = dir;
         this.distance = distance;
