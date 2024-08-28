@@ -6,7 +6,11 @@ using UnityEngine;
 public class Kill_Gimmick : GimmickTrigger
 {
     public List<GameObject> killDetectionObjects;
-
+    private bool a;
+    private void Start()
+    {
+        a = false;
+    }
     private void Update()
     {
         bool allInactive = true;
@@ -22,9 +26,10 @@ public class Kill_Gimmick : GimmickTrigger
         }
 
         // 모든 객체가 비활성화된 경우에만 함수 호출
-        if (allInactive)
+        if (allInactive && killDetectionObjects != null && !a)
         {
             GetComponentInParent<GimmickInput>().InvokeEvent();
+            a = true;
         }
     }
 }
