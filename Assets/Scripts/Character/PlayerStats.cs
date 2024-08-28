@@ -16,6 +16,8 @@ public class PlayerStats : Stats, IUpdater
 
     protected override void Start()
     {
+        base.Start();
+
         playerMain = GetComponent<PlayerMainController>();
 
         morphPoints.Add(Morph.BACK, 1);

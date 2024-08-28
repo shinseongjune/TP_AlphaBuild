@@ -12,7 +12,7 @@ public enum NodeState
 
 public abstract class Node
 {
-    public static MonsterMainController main;
+    public MonsterMainController main;
 
     // 노드의 상태를 나타내는 변수
     protected NodeState _nodeState;
@@ -23,6 +23,7 @@ public abstract class Node
     // 자식 노드를 추가하는 함수
     public void AddChild(Node child)
     {
+        child.main = BehaviorTree.currentMain;
         children.Add(child);
     }
 
@@ -171,6 +172,10 @@ public class AttackingCondition : Node
 {
     public override NodeState Evaluate()
     {
+        if (main.anim.GetNextState().IsName("Locomotion"))
+        {
+            main.spawner.attackerCount--;
+        }
         if (main.anim.GetCurrentState().IsName("Attack"))
         {
             _nodeState = NodeState.Success;
@@ -185,12 +190,56 @@ public class CombatSelector : Selector
 {
     public CombatSelector()
     {
+        AddChild(new DoAttackSequence());
         AddChild(new BackstepSequence());
         AddChild(new ChaseSequence());
         //AddChild(doattacksequence)
         AddChild(new WaitAction());
     }
 }
+
+public class DoAttackSequence : Sequence
+{
+    public DoAttackSequence()
+    {
+        AddChild(new CanAttackCondition());
+        AddChild(new DoAttackAction());
+    }
+}
+
+public class CanAttackCondition : Node
+{
+    public override NodeState Evaluate()
+    {
+        if (main.target != null)
+        {
+            if (main.spawner.attackerCount > 1)
+            {
+                _nodeState = NodeState.Failure;
+                return _nodeState;
+            }
+            if (Vector3.Distance(main.transform.position, main.target.transform.position) <= 1.5f)
+            {
+                _nodeState = NodeState.Success;
+                main.spawner.attackerCount++;
+                return _nodeState;
+            }
+        }
+        _nodeState = NodeState.Failure;
+        return _nodeState;
+    }
+}
+
+public class DoAttackAction : Node
+{
+    public override NodeState Evaluate()
+    {
+        main.Attack();
+        _nodeState = NodeState.Success;
+        return _nodeState;
+    }
+}
+
 
 public class BackstepSequence : Sequence
 {
@@ -323,7 +372,7 @@ public class RootNode : Selector
 {
     public RootNode(MonsterMainController main)
     {
-        Node.main = main;
+        this.main = main;
 
         AddChild(new DeathSequence());
         AddChild(new CCSequence());
@@ -336,6 +385,8 @@ public class RootNode : Selector
 
 public class BehaviorTree : IUpdater
 {
+    public static MonsterMainController currentMain;
+
     private Node _rootNode;
 
     float thinkCooldown = 0;
@@ -343,6 +394,8 @@ public class BehaviorTree : IUpdater
 
     public BehaviorTree(MonsterMainController main)
     {
+        currentMain = main;
+
         // Behavior Tree의 루트 노드 초기화
         _rootNode = new RootNode(main);
     }

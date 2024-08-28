@@ -7,12 +7,11 @@ using UnityEngine;
 public class MonsterMainController : MainController
 {
     public Transform targetPosition;
+    public GameObject testSkillCollider;
 
     CharacterController controller;
 
     BehaviorTree ai;
-
-    public bool isAttacker;
 
     public PlayerMainController target;
 
@@ -23,6 +22,7 @@ public class MonsterMainController : MainController
     List<IUpdater> updaters = new List<IUpdater>();
 
     [HideInInspector] public bool isGameStopped;
+    public EnemySpawner spawner;
 
     private void Awake()
     {
@@ -80,6 +80,20 @@ public class MonsterMainController : MainController
         anim.ResetTrigger("Backstep");
         anim.SetFloat("MoveZ", 0);
         targetPosition.position = transform.position;
+    }
+
+    public void Attack()
+    {
+        anim.ResetTrigger("Attack");
+        anim.ResetTrigger("Backstep");
+        anim.SetFloat("MoveZ", 0);
+
+        Vector3 dir = target.transform.position - transform.position;
+        dir.y = 0;
+        transform.rotation = Quaternion.LookRotation(dir.normalized);
+
+        anim.SetTrigger("Attack");
+        testSkillCollider.SetActive(true);
     }
 
     public void Die()
