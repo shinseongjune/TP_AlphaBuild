@@ -20,7 +20,6 @@ public class EnemySpawner : MonoBehaviour
 
     public float ATTACK_RADIUS = 1.5f;
 
-    float cooldown;
     public float ATTACK_COOLDOWN = 0.8f;
 
     public int attackerCount;
@@ -38,6 +37,22 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
+        bool allDead = true;
+        foreach (var enemy in members)
+        {
+            if (enemy.GetComponentInChildren<EnemyStats>().hp > 0)
+            {
+                allDead = false;
+                break;
+            }
+        }
+
+        if (allDead)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         if (!isInCombat)
         {
             target = null;
@@ -59,9 +74,16 @@ public class EnemySpawner : MonoBehaviour
                 foreach (var enemy in members)
                 {
                     enemy.GetComponentInChildren<MonsterMainController>().target = target;
-                    cooldown = 0;
                 }
             }
         }
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, 3f);
+    }
+#endif
 }

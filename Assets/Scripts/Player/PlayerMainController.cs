@@ -113,11 +113,11 @@ public class PlayerMainController : MainController
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyBind.morph))
+        if (Input.GetKeyDown(KeyBind.Morph))
         {
             GameManager.Instance.SetActiveMorphScreen(true);
         }
-        else if (Input.GetKeyUp(KeyBind.morph))
+        else if (Input.GetKeyUp(KeyBind.Morph))
         {
             GameManager.Instance.SetActiveMorphScreen(false);
         }

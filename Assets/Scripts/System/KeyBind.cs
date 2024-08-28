@@ -21,22 +21,22 @@ public static class KeyBind
 
     public static Dictionary<Action, KeyCode> keys = new Dictionary<Action, KeyCode>();
 
-    public static KeyCode move_forward => keys[Action.Move_Forward];
-    public static KeyCode move_backward => keys[Action.Move_Backward];
-    public static KeyCode move_left => keys[Action.Move_Left];
-    public static KeyCode move_right => keys[Action.Move_Right];
+    public static KeyCode Move_forward => keys[Action.Move_Forward];
+    public static KeyCode Move_backward => keys[Action.Move_Backward];
+    public static KeyCode Move_left => keys[Action.Move_Left];
+    public static KeyCode Move_right => keys[Action.Move_Right];
 
-    public static KeyCode sprint => keys[Action.Sprint];
-    public static KeyCode jump => keys[Action.Jump];
-    public static KeyCode roll => keys[Action.Roll];
-    public static KeyCode dash => keys[Action.Dash];
+    public static KeyCode Sprint => keys[Action.Sprint];
+    public static KeyCode Jump => keys[Action.Jump];
+    public static KeyCode Roll => keys[Action.Roll];
+    public static KeyCode Dash => keys[Action.Dash];
 
-    public static KeyCode interact => keys[Action.Interact];
+    public static KeyCode Interact => keys[Action.Interact];
 
-    public static KeyCode basicSkill => keys[Action.BasicSkill];
-    public static KeyCode special_skill => keys[Action.Special_Skill];
+    public static KeyCode BasicSkill => keys[Action.BasicSkill];
+    public static KeyCode Special_skill => keys[Action.Special_Skill];
 
-    public static KeyCode morph => keys[Action.Morph];
+    public static KeyCode Morph => keys[Action.Morph];
 
     static KeyBind()
     {
@@ -51,7 +51,7 @@ public static class KeyBind
         keys[Action.Roll] = KeyCode.Space;
         keys[Action.Dash] = KeyCode.LeftControl;
 
-        keys[Action.Interact] = KeyCode.F;
+        keys[Action.Interact] = KeyCode.G;
 
         keys[Action.BasicSkill] = KeyCode.Mouse0;
         keys[Action.Special_Skill] = KeyCode.Alpha1;

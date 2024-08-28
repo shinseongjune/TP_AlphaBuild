@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemies: []
   ATTACK_RADIUS: 1.5
+  ATTACK_COOLDOWN: 0.8
+  attackerCount: 0

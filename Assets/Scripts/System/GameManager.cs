@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+#if UNITY_EDITOR
+    public static readonly string VERSION = "0.0.1";
+#endif
+
     #region Game State Machine
 
     abstract class GameState
@@ -162,15 +166,13 @@ public class GameManager : Singleton<GameManager>
     }
     #endregion
 
-    PlayerMainController playerMain;
-    UI_MorphScreen UI_MorphScreen;
+    public PlayerMainController playerMain;
+    public UI_MorphScreen UI_MorphScreen;
 
     GameStateMachine stateMachine;
 
     private void Start()
     {
-        playerMain = FindFirstObjectByType<PlayerMainController>();
-        UI_MorphScreen = FindFirstObjectByType<UI_MorphScreen>();
         UI_MorphScreen.gameObject.SetActive(false);
 
         stateMachine = new GameStateMachine();

@@ -98,12 +98,12 @@ public class LocomotionState : State
 
         int h = 0;
         int v = 0;
-        if (Input.GetKey(KeyBind.move_forward)) v += 1;
-        if (Input.GetKey(KeyBind.move_backward)) v -= 1;
-        if (Input.GetKey(KeyBind.move_left)) h -= 1;
-        if (Input.GetKey(KeyBind.move_right)) h += 1;
+        if (Input.GetKey(KeyBind.Move_forward)) v += 1;
+        if (Input.GetKey(KeyBind.Move_backward)) v -= 1;
+        if (Input.GetKey(KeyBind.Move_left)) h -= 1;
+        if (Input.GetKey(KeyBind.Move_right)) h += 1;
 
-        bool isSprint = Input.GetKey(KeyBind.sprint);
+        bool isSprint = Input.GetKey(KeyBind.Sprint);
         if (isSprint)
         {
             player.MAX_JUMP_HEIGHT = 40f;
@@ -113,8 +113,8 @@ public class LocomotionState : State
             player.MAX_JUMP_HEIGHT = 8f;
         }
 
-        if (Input.GetKey(KeyBind.jump)) player.jumpGauge = Mathf.Min(player.jumpGauge + 2 * player.MAX_JUMP_HEIGHT * Time.deltaTime, player.MAX_JUMP_HEIGHT);
-        if (Input.GetKeyUp(KeyBind.jump))
+        if (Input.GetKey(KeyBind.Jump)) player.jumpGauge = Mathf.Min(player.jumpGauge + 2 * player.MAX_JUMP_HEIGHT * Time.deltaTime, player.MAX_JUMP_HEIGHT);
+        if (Input.GetKeyUp(KeyBind.Jump))
         {
             isJumpActivated = true;
         }
@@ -133,21 +133,21 @@ public class LocomotionState : State
     {
         int h = 0;
         int v = 0;
-        if (Input.GetKey(KeyBind.move_forward)) v += 1;
-        if (Input.GetKey(KeyBind.move_backward)) v -= 1;
-        if (Input.GetKey(KeyBind.move_left)) h -= 1;
-        if (Input.GetKey(KeyBind.move_right)) h += 1;
+        if (Input.GetKey(KeyBind.Move_forward)) v += 1;
+        if (Input.GetKey(KeyBind.Move_backward)) v -= 1;
+        if (Input.GetKey(KeyBind.Move_left)) h -= 1;
+        if (Input.GetKey(KeyBind.Move_right)) h += 1;
 
         Collider wall = player.GetCollidedWall(h, v);
 
-        if (Input.GetKey(KeyBind.roll))
+        if (Input.GetKey(KeyBind.Roll))
         {
             player.TurnImmediately(h, v);
 
             next = Type.Roll;
             return true;
         }
-        else if (isJumpActivated || Input.GetKeyUp(KeyBind.jump))
+        else if (isJumpActivated || Input.GetKeyUp(KeyBind.Jump))
         {
             player.TurnImmediately(h, v);
 
@@ -160,14 +160,14 @@ public class LocomotionState : State
             next = Type.Air;
             return true;
         }
-        else if (Input.GetKey(KeyBind.sprint) && wall != null)
+        else if (Input.GetKey(KeyBind.Sprint) && wall != null)
         {
             player.anim.SetTrigger("WallRide");
             player.attachedWall = wall;
             next = Type.Wall;
             return true;
         }
-        else if (Input.GetKeyDown(KeyBind.basicSkill))
+        else if (Input.GetKeyDown(KeyBind.BasicSkill))
         {
             if (player.DoSkill(KeyBind.Action.BasicSkill))
             {
@@ -219,12 +219,12 @@ public class JumpState : State
 
         int h = 0;
         int v = 0;
-        if (Input.GetKey(KeyBind.move_forward)) v += 1;
-        if (Input.GetKey(KeyBind.move_backward)) v -= 1;
-        if (Input.GetKey(KeyBind.move_left)) h -= 1;
-        if (Input.GetKey(KeyBind.move_right)) h += 1;
+        if (Input.GetKey(KeyBind.Move_forward)) v += 1;
+        if (Input.GetKey(KeyBind.Move_backward)) v -= 1;
+        if (Input.GetKey(KeyBind.Move_left)) h -= 1;
+        if (Input.GetKey(KeyBind.Move_right)) h += 1;
 
-        bool isSprint = Input.GetKey(KeyBind.sprint);
+        bool isSprint = Input.GetKey(KeyBind.Sprint);
 
         player.HandleCamera();
         player.Move(h, v, isSprint);
@@ -237,14 +237,14 @@ public class JumpState : State
     {
         int h = 0;
         int v = 0;
-        if (Input.GetKey(KeyBind.move_forward)) v += 1;
-        if (Input.GetKey(KeyBind.move_backward)) v -= 1;
-        if (Input.GetKey(KeyBind.move_left)) h -= 1;
-        if (Input.GetKey(KeyBind.move_right)) h += 1;
+        if (Input.GetKey(KeyBind.Move_forward)) v += 1;
+        if (Input.GetKey(KeyBind.Move_backward)) v -= 1;
+        if (Input.GetKey(KeyBind.Move_left)) h -= 1;
+        if (Input.GetKey(KeyBind.Move_right)) h += 1;
 
         Collider wall = player.GetCollidedWall(h, v);
 
-        if (Input.GetKeyDown(KeyBind.dash))
+        if (Input.GetKeyDown(KeyBind.Dash))
         {
             next = Type.Dash;
             return true;
@@ -260,7 +260,7 @@ public class JumpState : State
             next = Type.Air;
             return true;
         }
-        else if (Input.GetKey(KeyBind.sprint) && wall != null)
+        else if (Input.GetKey(KeyBind.Sprint) && wall != null)
         {
             player.anim.SetTrigger("WallRide");
             player.attachedWall = wall;
@@ -297,12 +297,12 @@ public class AirState : State
 
         int h = 0;
         int v = 0;
-        if (Input.GetKey(KeyBind.move_forward)) v += 1;
-        if (Input.GetKey(KeyBind.move_backward)) v -= 1;
-        if (Input.GetKey(KeyBind.move_left)) h -= 1;
-        if (Input.GetKey(KeyBind.move_right)) h += 1;
+        if (Input.GetKey(KeyBind.Move_forward)) v += 1;
+        if (Input.GetKey(KeyBind.Move_backward)) v -= 1;
+        if (Input.GetKey(KeyBind.Move_left)) h -= 1;
+        if (Input.GetKey(KeyBind.Move_right)) h += 1;
 
-        bool isSprint = Input.GetKey(KeyBind.sprint);
+        bool isSprint = Input.GetKey(KeyBind.Sprint);
 
         player.HandleCamera();
         player.Move(h, v, isSprint);
@@ -315,14 +315,14 @@ public class AirState : State
     {
         int h = 0;
         int v = 0;
-        if (Input.GetKey(KeyBind.move_forward)) v += 1;
-        if (Input.GetKey(KeyBind.move_backward)) v -= 1;
-        if (Input.GetKey(KeyBind.move_left)) h -= 1;
-        if (Input.GetKey(KeyBind.move_right)) h += 1;
+        if (Input.GetKey(KeyBind.Move_forward)) v += 1;
+        if (Input.GetKey(KeyBind.Move_backward)) v -= 1;
+        if (Input.GetKey(KeyBind.Move_left)) h -= 1;
+        if (Input.GetKey(KeyBind.Move_right)) h += 1;
 
         Collider wall = player.GetCollidedWall(h, v);
 
-        if (Input.GetKeyDown(KeyBind.dash))
+        if (Input.GetKeyDown(KeyBind.Dash))
         {
             next = Type.Dash;
             return true;
@@ -332,7 +332,7 @@ public class AirState : State
             next = Type.Locomotion;
             return true;
         }
-        else if (Input.GetKey(KeyBind.sprint) && wall != null)
+        else if (Input.GetKey(KeyBind.Sprint) && wall != null)
         {
             player.anim.SetTrigger("WallRide");
             player.attachedWall = wall;
@@ -367,10 +367,10 @@ public class RollState : State
 
         int h = 0;
         int v = 0;
-        if (Input.GetKey(KeyBind.move_forward)) v += 1;
-        if (Input.GetKey(KeyBind.move_backward)) v -= 1;
-        if (Input.GetKey(KeyBind.move_left)) h -= 1;
-        if (Input.GetKey(KeyBind.move_right)) h += 1;
+        if (Input.GetKey(KeyBind.Move_forward)) v += 1;
+        if (Input.GetKey(KeyBind.Move_backward)) v -= 1;
+        if (Input.GetKey(KeyBind.Move_left)) h -= 1;
+        if (Input.GetKey(KeyBind.Move_right)) h += 1;
 
         player.HandleCamera();
         
@@ -460,10 +460,10 @@ public class WallState : State
 
         int h = 0;
         int v = 0;
-        if (Input.GetKey(KeyBind.move_forward)) v += 1;
-        if (Input.GetKey(KeyBind.move_backward)) v -= 1;
-        if (Input.GetKey(KeyBind.move_left)) h -= 1;
-        if (Input.GetKey(KeyBind.move_right)) h += 1;
+        if (Input.GetKey(KeyBind.Move_forward)) v += 1;
+        if (Input.GetKey(KeyBind.Move_backward)) v -= 1;
+        if (Input.GetKey(KeyBind.Move_left)) h -= 1;
+        if (Input.GetKey(KeyBind.Move_right)) h += 1;
 
         Collider wall = player.GetCollidedWall(h, v);
 
@@ -527,14 +527,14 @@ public class AttackState : State
     {
         int h = 0;
         int v = 0;
-        if (Input.GetKey(KeyBind.move_forward)) v += 1;
-        if (Input.GetKey(KeyBind.move_backward)) v -= 1;
-        if (Input.GetKey(KeyBind.move_left)) h -= 1;
-        if (Input.GetKey(KeyBind.move_right)) h += 1;
+        if (Input.GetKey(KeyBind.Move_forward)) v += 1;
+        if (Input.GetKey(KeyBind.Move_backward)) v -= 1;
+        if (Input.GetKey(KeyBind.Move_left)) h -= 1;
+        if (Input.GetKey(KeyBind.Move_right)) h += 1;
 
         //Collider wall = player.IsWallCollided(h, v);
 
-        if (player.IsGrounded() && Input.GetKey(KeyBind.roll))
+        if (player.IsGrounded() && Input.GetKey(KeyBind.Roll))
         {
             player.StopSkill();
             player.TurnImmediately(h, v);
@@ -542,7 +542,7 @@ public class AttackState : State
             next = Type.Roll;
             return true;
         }
-        if (Input.GetKeyDown(KeyBind.basicSkill))
+        if (Input.GetKeyDown(KeyBind.BasicSkill))
         {
             if (player.DoSkill(KeyBind.Action.BasicSkill))
             {
