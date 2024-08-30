@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
 
     public int attackerCount;
 
-    private void Start()
+    private void OnEnable()
     {
         foreach (var enemy in enemies)
         {
