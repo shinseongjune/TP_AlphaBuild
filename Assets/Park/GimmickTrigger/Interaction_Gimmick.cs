@@ -13,6 +13,16 @@ public class Interaction_Gimmick : GimmickTrigger
 
     public Transform targetObject; // 3D ¹°Ã¼ÀÇ Transform
     private bool isPlayerInTrigger;
+
+    private void OnEnable()
+    {
+        
+    }
+    private void OnDisable()
+    {
+        InteractionImge.gameObject.SetActive(false);
+    }
+
     private void Start()
     {
         mainCamera = Camera.main;
