@@ -10,7 +10,7 @@ public class PlayerStats : Stats, IUpdater
 
     public int currentMorphPoint = 100;
     public float morphDuration;
-    const float MAX_MORPH_DURATION = 10f;
+    const float MAX_MORPH_DURATION = 20f;
 
     bool isMorphed;
 

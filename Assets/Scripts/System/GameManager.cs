@@ -4,7 +4,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
 #if UNITY_EDITOR
-    public static readonly string VERSION = "0.0.1";
+    public static readonly string VERSION = "PD.0.0.2";
 #endif
 
     #region Game State Machine

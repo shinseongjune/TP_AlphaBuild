@@ -6,6 +6,8 @@ public class EnemyStats : Stats
 {
     //NpcController controller;
 
+    public bool isMapObject;
+
     protected override void Start()
     {
         base.Start();
@@ -16,5 +18,10 @@ public class EnemyStats : Stats
     {
         base.Die();
         //controller.death = true;
+
+        if (isMapObject)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
