@@ -20,7 +20,10 @@ public class Interaction_Gimmick : GimmickTrigger
     }
     private void OnDisable()
     {
-        InteractionImge.gameObject.SetActive(false);
+        if (InteractionImge != null)
+        {
+            InteractionImge.gameObject.SetActive(false);
+        }
     }
 
     private void Start()
