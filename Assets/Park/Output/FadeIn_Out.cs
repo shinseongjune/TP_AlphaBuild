@@ -13,6 +13,11 @@ public class FadeIn_Out : GimmickOutput
 
     public Image targetImage; // 페이드를 적용할 UI 이미지 컴포넌트
 
+    private void Start()
+    {
+        targetImage.gameObject.SetActive(false);
+    }
+
     public override void Act()
     {
         // targetImage가 할당되지 않은 경우 경고를 출력합니다.
@@ -22,7 +27,7 @@ public class FadeIn_Out : GimmickOutput
             return;
 
         }
-
+        targetImage.gameObject.SetActive(true);
         // 페이드 효과를 시작합니다.
         StartCoroutine(FadeCoroutine());
     }
@@ -50,5 +55,10 @@ public class FadeIn_Out : GimmickOutput
         Color finalColor = targetImage.color;
         finalColor.a = endAlpha;
         targetImage.color = finalColor;
+        isDone = true;
+        if (fadeType == FadeType.FadeOut)
+        {
+            targetImage.gameObject.SetActive(false);
+        }
     }
 }
