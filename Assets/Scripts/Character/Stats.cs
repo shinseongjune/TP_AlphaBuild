@@ -27,7 +27,7 @@ public abstract class Stats : MonoBehaviour
         {
             case CrowdControl.Type.Stagger:
                 Stagger stagger = new Stagger(ccData.duration, ccData.dir);
-                GetComponent<MainController>().cc.ApplyCC(stagger);
+                GetComponent<MainController>()?.cc.ApplyCC(stagger);
                 break;
             case CrowdControl.Type.Knockback:
                 break;
