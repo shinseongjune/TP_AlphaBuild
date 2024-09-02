@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SonudManager : Singleton<SonudManager>
+public class SonudManager : Singleton<SonudManager>// 싱글톤을 그냥 구현하면 됩니다 싱글톤 안쓰실거면 MonoBehaviour 상속 ㄱㄱ
 {
     // 오디오 클립을 재생하기 위한 오디오 소스 리스트
     private List<AudioSource> audioSources = new List<AudioSource>();
+
+    public float basicvolume;
 
     // 오디오 소스 오브젝트의 수
     public int initialAudioSourceCount = 10;
@@ -22,8 +24,17 @@ public class SonudManager : Singleton<SonudManager>
         }
     }
 
+    public void PlayGimmaickSound(AudioClip clip)
+    {
+        PlaySound(clip);
+    }
+    public void SetBasicVolume(float volume)
+    {
+        basicvolume = volume;
+    }
+
     // 사운드를 재생하는 함수, 위치가 없으면 0,0,0에 생성
-    public void PlaySound(AudioClip clip, Vector3? position = null)
+    public void PlaySound(AudioClip clip,float volume = 0, Vector3? position = null)
     {
         // 사용 가능한 오디오 소스를 찾음
         AudioSource availableSource = GetAvailableAudioSource();
@@ -35,6 +46,7 @@ public class SonudManager : Singleton<SonudManager>
 
             // 오디오 클립 설정 및 재생
             availableSource.clip = clip;
+            availableSource.volume = volume == 0 ? basicvolume : volume;
             availableSource.Play();
         }
         else

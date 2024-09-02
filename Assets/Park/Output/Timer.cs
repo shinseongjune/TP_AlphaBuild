@@ -17,5 +17,8 @@ public class Timer : GimmickOutput
     {
         yield return new WaitForSeconds(time);
         isDone = true;
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        isDone = false;
     }
 }
